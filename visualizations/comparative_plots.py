@@ -23,7 +23,7 @@ def data(attribute):
     return {"poisonous": poisonous_data, "edible": edible_data}
 
 
-def plot_comparitive_data(attribute):
+def plot_comparative_data(attribute, plot=True, save=False):
     edible_data = data(attribute)["edible"]
     poisonous_data = data(attribute)["poisonous"]
 
@@ -47,10 +47,21 @@ def plot_comparitive_data(attribute):
     plt.legend()
 
     plt.tight_layout()
-    plt.show()
+
+    if plot:
+        plt.show()
+
+    if save:
+        plt.savefig('comparative_barcharts/{}.png'.format(attribute))
 
 
 def plot_all():
     attributes = shroom_dealer.get_attribute_dictionary()
     for a in attributes.keys():
-        plot_comparitive_data(a)
+        plot_comparative_data(a, plot=True)
+
+
+def save_all():
+    attributes = shroom_dealer.get_attribute_dictionary()
+    for a in attributes.keys():
+        plot_comparative_data(a, save=True)
