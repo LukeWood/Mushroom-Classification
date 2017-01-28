@@ -33,6 +33,8 @@ def plot_comparative_data(attribute, plot=True, save=False):
     bar_width = 0.35
     opacity=0.4
 
+    fig, ax = plt.subplots()
+
     plt.bar(index, edible_data.values(), bar_width, align='center',
             color='b', label='edible', alpha=opacity)
     plt.bar(index + bar_width, poisonous_data.values(), bar_width,
@@ -54,6 +56,8 @@ def plot_comparative_data(attribute, plot=True, save=False):
     if save:
         plt.savefig('comparative_barcharts/{}.png'.format(attribute))
 
+    plt.close()
+
 
 def plot_all():
     attributes = shroom_dealer.get_attribute_dictionary()
@@ -64,4 +68,4 @@ def plot_all():
 def save_all():
     attributes = shroom_dealer.get_attribute_dictionary()
     for a in attributes.keys():
-        plot_comparative_data(a, save=True)
+        plot_comparative_data(a, plot=False, save=True)
