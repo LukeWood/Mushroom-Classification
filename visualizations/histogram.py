@@ -32,4 +32,7 @@ for key in tf_tpf:
     plt.xlabel("Attribbute Name")
     plt.xticks(np.arange(len(all_corrs))+bar_width*3/2, [x[0] for x in all_corrs])
 
+    x1,x2,y1,y2 = plt.axis()
+    plt.axis((x1,x2,0.0,1.0))
+
     plt.savefig('barcharts/%s.png' % (key), dpi=fig.dpi)
