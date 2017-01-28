@@ -25,9 +25,11 @@ for key in tf_tpf:
 
     fig = plt.figure()
 
-    plt.title('Attributes Sorted by Total Frequency/Total Poison Frequency')
+    plt.title('%s'%(key))
+
     rects1 = plt.bar(np.arange(len(all_corrs))+bar_width ,[x[1] for x in all_corrs],bar_width)
-    plt.xlabel("Percentage of Occurences that were Poisonous")
+    plt.ylabel("Percentage of Occurences that were Poisonous")
+    plt.xlabel("Attribbute Name")
     plt.xticks(np.arange(len(all_corrs))+bar_width*3/2, [x[0] for x in all_corrs])
 
     plt.savefig('barcharts/%s.png' % (key), dpi=fig.dpi)
