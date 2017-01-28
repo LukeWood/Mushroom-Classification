@@ -24,3 +24,11 @@ def get_hist_data():
         poison_hist_data[x] = poison_counts
 
     return hist_data, poison_hist_data
+
+def gettf_tpf():
+    data,poison_data = get_hist_data()
+    tf_tpf = {}
+
+    for val in data:
+        tf_tpf[val] = dict([(x,poison_data[val][x]/data[val][x]) for x in data[val] if data[val][x] != 0])
+    return tf_tpf
