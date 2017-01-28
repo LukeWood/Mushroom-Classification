@@ -5,15 +5,22 @@ import numpy as np
 sys.path.append(os.path.abspath('..'))
 from preprocessing import shroom_dealer
 
-attr_map = shroom_dealer.get_attribute_dictionary()
-df = shroom_dealer.get_data_frame()
+def get_hist_data():
+    attr_map = shroom_dealer.get_attribute_dictionary()
+    df = shroom_dealer.get_data_frame()
 
-hist_data = dict([(atr,None) for atr in attr_map])
+    hist_data = dict([(atr,None) for atr in attr_map])
+    poison_hist_data = dict([(atr,None) for atr in attr_map])
 
-for x in attr_map:
-    counts = dict([(attr_map[x][y],0) for y in attr_map[x]])
-    for row in df[x]:
-        counts[attr_map[x][row]]+=1
-    hist_data[x] = dict([(c,counts[c]/df.shape[0]) for c in counts])
+    for x in attr_map:
+        counts = dict([(attr_map[x][y],0) for y in attr_map[x]])
+        poison_counts = dict([(attr_map[x][y],0) for y in attr_map[x]])
 
-print(hist_data)
+        for val, poison in zip(df[x],df["poisonous"]):
+            counts[attr_map[x][val]]+=1
+            if(poison == "p"):
+                poison_counts[attr_map[x][val]]+=1
+        hist_data[x] = counts
+        poison_hist_data[x] = poison_counts
+
+    return hist_data, poison_hist_data
