@@ -46,7 +46,7 @@ def heatmap_important():
     ("gill-attachment","veil-color"),
     ("ring-type","spore-print-color"),
     ("odor","poisonous"),
-    ("stalk-shape","stalk-root")
+    ("stalk-shape","stalk-roots")
     ]
 
     for x,y in important_pairs:
