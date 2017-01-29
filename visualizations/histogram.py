@@ -28,8 +28,8 @@ for key in tf_tpf:
     plt.title('%s'%(key))
 
     rects1 = plt.bar(np.arange(len(all_corrs))+bar_width ,[x[1] for x in all_corrs],bar_width)
-    plt.ylabel("Percentage of Occurences that were Poisonous")
-    plt.xlabel("Attribbute Name")
+    plt.ylabel("Percentage of Poisonous Occurrences")
+    plt.xlabel("Attribute Name")
     plt.xticks(np.arange(len(all_corrs))+bar_width*3/2, [x[0] for x in all_corrs])
 
     x1,x2,y1,y2 = plt.axis()

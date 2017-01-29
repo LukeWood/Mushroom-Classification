@@ -13,6 +13,7 @@ def heatmap_p_vs_e(attribute):
     labels = shroom_dealer.get_attribute_dictionary()[attribute]
     p_data = df[attribute][df['poisonous'] == 'p'].value_counts()
     e_data = df[attribute][df['poisonous'] == 'e'].value_counts()
+    
     data = pd.concat([p_data, e_data], axis=1)
     data.columns = ['poisonous', 'edible']
 
