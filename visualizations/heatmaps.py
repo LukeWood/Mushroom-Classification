@@ -18,7 +18,7 @@ def heatmap(attr1, attr2):
     data = []
 
     for a in df[attr1].cat.categories:
-        column = df[attr2][df[attr1] == a].value_counts()
+        column = df[attr2][df[attr1] == a].value_counts()/len(df[df[attr1]==a])
         data.append(column)
 
     d = pd.concat(data, axis=1)
@@ -28,14 +28,24 @@ def heatmap(attr1, attr2):
 
     sns.heatmap(d, annot=True, yticklabels=ticks, fmt='g')
 
+
     plt.title("{} and {}".format(attr1, attr2))
     plt.yticks(rotation=0)
     plt.tight_layout()
-    plt.show()
-
+    plt.savefig("heatmaps/{}_and_{}.png".format(attr1, attr2))
 
 def heatmap_all():
     cat_names = shroom_dealer.get_attribute_dictionary().keys()
     combos = itertools.combinations(cat_names, 2)
     for attr1, attr2 in combos:
         heatmap(attr1, attr2)
+
+def heatmap_important():
+    important_pairs = [
+    ("gill-attachment","veil-color")
+    ]
+
+    for x,y in important_pairs:
+        heatmap(x,y)
+
+heatmap_important()
