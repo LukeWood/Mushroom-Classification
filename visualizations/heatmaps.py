@@ -9,7 +9,7 @@ import pandas as pd
 sys.path.append(os.path.abspath('..'))
 from preprocessing import shroom_dealer
 
-def heatmap(attr1, attr2):
+def heatmap(attr1, attr2,annot=True):
     df = shroom_dealer.get_data_frame()
 
     labels1 = shroom_dealer.get_attribute_dictionary()[attr1]
@@ -26,13 +26,14 @@ def heatmap(attr1, attr2):
 
     ticks = [labels2[a] for a in d.index]
 
-    sns.heatmap(d, annot=True, yticklabels=ticks, fmt='g')
+    sns.heatmap(d, annot=annot, yticklabels=ticks, fmt='.2f')
 
 
     plt.title("{} and {}".format(attr1, attr2))
     plt.yticks(rotation=0)
     plt.tight_layout()
     plt.savefig("heatmaps/{}_and_{}.png".format(attr1, attr2))
+    plt.clf()
 
 def heatmap_all():
     cat_names = shroom_dealer.get_attribute_dictionary().keys()
@@ -42,7 +43,9 @@ def heatmap_all():
 
 def heatmap_important():
     important_pairs = [
-    ("gill-attachment","veil-color")
+    ("gill-attachment","veil-color"),
+    ("ring-type","spore-print-color"),
+    ("odor","poisonous")
     ]
 
     for x,y in important_pairs:
