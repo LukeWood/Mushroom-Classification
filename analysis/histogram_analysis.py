@@ -25,6 +25,7 @@ def get_hist_data():
 
     return hist_data, poison_hist_data
 
+#tf_tpf - Term Frquency to Poison Frequency
 def get_tf_tpf():
     data,poison_data = get_hist_data()
     tf_tpf = {}
