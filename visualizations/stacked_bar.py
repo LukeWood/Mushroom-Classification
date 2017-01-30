@@ -11,8 +11,7 @@ from preprocessing import shroom_dealer
 a_map = shroom_dealer.get_attribute_dictionary()
 df = shroom_dealer.get_data_frame()
 for col in df.columns:
-    df[col].replace(a_map[col], inplace=True)
-
+    print df[col].replace(a_map[col], inplace=True)
 
 #Stacked Bar Graphed
 # the cross tab operator provides an easy way to get these numbers
