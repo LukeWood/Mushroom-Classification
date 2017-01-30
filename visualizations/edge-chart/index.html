@@ -40,7 +40,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + radius + "," + radius + ")");
 
-d3.json("edges.json", function(error, classes) {
+d3.json("edge_data/edges2475.json", function(error, classes) {
   if (error) throw error;
 
   var nodes = cluster.nodes(packageHierarchy(classes)),
