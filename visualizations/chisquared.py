@@ -37,7 +37,8 @@ def expected_data(observed):
             row_total = observed.sum(axis=1)[j]
             expected[j][i] = row_total*col_total/total
 
-    return expected
+    return pd.DataFrame(expected, index=observed.index,
+                        columns=observed.columns)
 
 
 cat_names = shroom_dealer.get_attribute_dictionary().keys()
@@ -55,17 +56,17 @@ chisqrs = chisqrs[:10]
 values = [d[0] for d in chisqrs]
 labels = [d[1].replace("-", "\n") for d in chisqrs]
 
-index = np.arange(len(chisqrs))
-bar_width = .35
-opacity=0.4
-
-
-plt.title("Attributes most associated with edibility")
-plt.bar(index, values, bar_width, align='center')
-plt.xticks(index, labels)
-plt.ylabel("Chi-squared values")
-plt.autoscale()
-plt.tight_layout()
-plt.show()
+#index = np.arange(len(chisqrs))
+#bar_width = .35
+#opacity=0.4
+#
+#
+#plt.title("Attributes most associated with edibility")
+#plt.bar(index, values, bar_width, align='center')
+#plt.xticks(index, labels)
+#plt.ylabel("Chi-squared values")
+#plt.autoscale()
+#plt.tight_layout()
+#plt.show()
 
 
