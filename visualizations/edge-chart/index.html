@@ -13,9 +13,22 @@
 }
 
 </style>
+<h1 id="title"></h1>
 <body>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
+var url = window.location.search
+var getQuery = url != null ? url.split("?")[1] : null;
+var DATA_SIZE = 2475;
+if(getQuery != null){
+var params = getQuery.split('&');
+params.forEach(function(element){
+  if(element.split("=")[0] == "size"){
+    DATA_SIZE = parseInt(element.split("=")[1]);
+  }
+});
+}
+document.getElementById("title").innerHTML = "Edges between Attributes with "+DATA_SIZE +" Common Instances";
 
 var diameter = 960,
     radius = diameter / 2,
@@ -40,7 +53,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + radius + "," + radius + ")");
 
-d3.json("edge_data/edges2475.json", function(error, classes) {
+d3.json("edge_data/edges"+DATA_SIZE+".json", function(error, classes) {
   if (error) throw error;
 
   var nodes = cluster.nodes(packageHierarchy(classes)),
