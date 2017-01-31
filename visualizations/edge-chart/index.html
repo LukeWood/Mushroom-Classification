@@ -13,19 +13,22 @@
 }
 
 </style>
+<h1 id="title"></h1>
 <body>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 var url = window.location.search
-var getQuery = url.split("?")[1]
+var getQuery = url != null ? url.split("?")[1] : null;
+var DATA_SIZE = 2475;
+if(getQuery != null){
 var params = getQuery.split('&');
-var DATA_SIZE = 2500;
-
 params.forEach(function(element){
   if(element.split("=")[0] == "size"){
     DATA_SIZE = parseInt(element.split("=")[1]);
   }
 });
+}
+document.getElementById("title").innerHTML = "Edges between Attributes with "+DATA_SIZE +" Common Instances";
 
 var diameter = 960,
     radius = diameter / 2,
