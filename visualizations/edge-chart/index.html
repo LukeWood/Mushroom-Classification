@@ -13,18 +13,17 @@
 }
 
 </style>
-<h1 id="title"></h1>
+<center><h1 id="title"></h1></center>
+<center><input type="range" min="25" max="2475" step="25" onchange="render(this.value)"></input><p id="label"></p></center>
 <body>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+
 <script>
-
 function render(DATA_SIZE){
-
   Array.prototype.forEach.call(document.getElementsByTagName("svg"),function(el){
     el.parentNode.removeChild(el);
   });
-
-  document.getElementById("title").innerHTML = "Edges between Attributes with "+DATA_SIZE +" Common Instances";
+  document.getElementById("label").innerHTML = "Minimum Common to have Connection Between Attributes: "+DATA_SIZE;
 
   var diameter = 960,
       radius = diameter / 2,
@@ -120,4 +119,5 @@ function render(DATA_SIZE){
     return imports;
   }
 }
+render(100)
 </script>
