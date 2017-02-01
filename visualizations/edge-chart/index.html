@@ -13,115 +13,111 @@
 }
 
 </style>
-<h1 id="title"></h1>
+<center><h1 id="title"></h1></center>
+<center><input type="range" min="25" max="2475" step="25" onchange="render(this.value)"></input><p id="label"></p></center>
 <body>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+
 <script>
-var url = window.location.search
-var getQuery = url != null ? url.split("?")[1] : null;
-var DATA_SIZE = 2475;
-if(getQuery != null){
-var params = getQuery.split('&');
-params.forEach(function(element){
-  if(element.split("=")[0] == "size"){
-    DATA_SIZE = parseInt(element.split("=")[1]);
-  }
-});
-}
-document.getElementById("title").innerHTML = "Edges between Attributes with "+DATA_SIZE +" Common Instances";
+function render(DATA_SIZE){
+  Array.prototype.forEach.call(document.getElementsByTagName("svg"),function(el){
+    el.parentNode.removeChild(el);
+  });
+  document.getElementById("label").innerHTML = "Minimum Common to have Connection Between Attributes: "+DATA_SIZE;
 
-var diameter = 960,
-    radius = diameter / 2,
-    innerRadius = radius - 120;
+  var diameter = 960,
+      radius = diameter / 2,
+      innerRadius = radius - 120;
 
-var cluster = d3.layout.cluster()
-    .size([360, innerRadius])
-    .sort(null)
-    .value(function(d) { return d.size; });
+  var cluster = d3.layout.cluster()
+      .size([360, innerRadius])
+      .sort(null)
+      .value(function(d) { return d.size; });
 
-var bundle = d3.layout.bundle();
+  var bundle = d3.layout.bundle();
 
-var line = d3.svg.line.radial()
-    .interpolate("bundle")
-    .tension(.85)
-    .radius(function(d) { return d.y; })
-    .angle(function(d) { return d.x / 180 * Math.PI; });
+  var line = d3.svg.line.radial()
+      .interpolate("bundle")
+      .tension(.85)
+      .radius(function(d) { return d.y; })
+      .angle(function(d) { return d.x / 180 * Math.PI; });
 
-var svg = d3.select("body").append("svg")
-    .attr("width", diameter)
-    .attr("height", diameter)
-  .append("g")
-    .attr("transform", "translate(" + radius + "," + radius + ")");
+  var svg = d3.select("body").append("svg")
+      .attr("width", diameter)
+      .attr("height", diameter)
+    .append("g")
+      .attr("transform", "translate(" + radius + "," + radius + ")");
 
-d3.json("edge_data/edges"+DATA_SIZE+".json", function(error, classes) {
-  if (error) throw error;
+  d3.json("edge_data/edges"+DATA_SIZE+".json", function(error, classes) {
+    if (error) throw error;
 
-  var nodes = cluster.nodes(packageHierarchy(classes)),
-      links = packageImports(nodes);
+    var nodes = cluster.nodes(packageHierarchy(classes)),
+        links = packageImports(nodes);
 
-  svg.selectAll(".link")
-      .data(bundle(links))
-    .enter().append("path")
-      .attr("class", "link")
-      .attr("d", line);
+    svg.selectAll(".link")
+        .data(bundle(links))
+      .enter().append("path")
+        .attr("class", "link")
+        .attr("d", line);
 
-  svg.selectAll(".node")
-      .data(nodes.filter(function(n) { return !n.children; }))
-    .enter().append("g")
-      .attr("class", "node")
-      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-    .append("text")
-      .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
-      .attr("dy", ".31em")
-      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-      .text(function(d) { return d.key; });
-});
+    svg.selectAll(".node")
+        .data(nodes.filter(function(n) { return !n.children; }))
+      .enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+      .append("text")
+        .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
+        .attr("dy", ".31em")
+        .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+        .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
+        .text(function(d) { return d.key; });
+  });
 
-d3.select(self.frameElement).style("height", diameter + "px");
+  d3.select(self.frameElement).style("height", diameter + "px");
 
-// Lazily construct the package hierarchy from class names.
-function packageHierarchy(classes) {
-  var map = {};
+  // Lazily construct the package hierarchy from class names.
+  function packageHierarchy(classes) {
+    var map = {};
 
-  function find(name, data) {
-    var node = map[name], i;
-    if (!node) {
-      node = map[name] = data || {name: name, children: []};
-      if (name.length) {
-        node.parent = find(name.substring(0, i = name.lastIndexOf(".")));
-        node.parent.children.push(node);
-        node.key = name.substring(i + 1);
+    function find(name, data) {
+      var node = map[name], i;
+      if (!node) {
+        node = map[name] = data || {name: name, children: []};
+        if (name.length) {
+          node.parent = find(name.substring(0, i = name.lastIndexOf(".")));
+          node.parent.children.push(node);
+          node.key = name.substring(i + 1);
+        }
       }
+      return node;
     }
-    return node;
+
+    classes.forEach(function(d) {
+      find(d.name, d);
+    });
+
+    return map[""];
   }
 
-  classes.forEach(function(d) {
-    find(d.name, d);
-  });
+  // Return a list of imports for the given array of nodes.
+  function packageImports(nodes) {
+    var map = {},
+        imports = [];
 
-  return map[""];
-}
-
-// Return a list of imports for the given array of nodes.
-function packageImports(nodes) {
-  var map = {},
-      imports = [];
-
-  // Compute a map from name to node.
-  nodes.forEach(function(d) {
-    map[d.name] = d;
-  });
-
-  // For each import, construct a link from the source to target node.
-  nodes.forEach(function(d) {
-    if (d.imports) d.imports.forEach(function(i) {
-      imports.push({source: map[d.name], target: map[i]});
+    // Compute a map from name to node.
+    nodes.forEach(function(d) {
+      map[d.name] = d;
     });
-  });
 
-  return imports;
+    // For each import, construct a link from the source to target node.
+    nodes.forEach(function(d) {
+      if (d.imports) d.imports.forEach(function(i) {
+        imports.push({source: map[d.name], target: map[i]});
+      });
+    });
+
+    return imports;
+  }
 }
-
+render(100)
 </script>
